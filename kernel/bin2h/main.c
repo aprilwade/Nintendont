@@ -18,8 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <malloc.h>
+// #include <malloc.h>
 int main (int argc, char **argv)
 {
 	if(argc < 2 || strrchr(argv[1], '.') == NULL || strcmp(".bin", strrchr(argv[1], '.')) != 0)
