@@ -35,7 +35,7 @@ TARGET	:= kernel.elf
 OBJECTS	:= start.o common.o alloc.o GCAM.o JVSIO.o JVSIOMessage.o FST.o DI.o RealDI.o \
 	   Patch.o PatchTimers.o TRI.o PatchWidescreen.o ISO.o Stream.o adp.o \
 	   EXI.o SRAM.o GCNCard.o SI.o HID.o diskio.o Config.o utils_asm.o ES.o NAND.o \
-	   main.o syscalls.o ReadSpeed.o vsprintf.o string.o prs.o net_dbg.o \
+	   main.o syscalls.o ReadSpeed.o vsprintf.o string.o prs.o net_dbg.o ios_ipc.o \
 	   SDI.o usb.o usbstorage.o wdvd.o
 LIBS	:= ../fatfs/libfatfs-arm.a be/libc.a be/libgcc.a
 ZIPFILE	:= ../loader/data/kernel.zip

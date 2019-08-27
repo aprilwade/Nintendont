@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "ff_utf8.h"
 
 #include "net_dbg.h"
+#include "ios_ipc.h"
 
 //#define USE_OSREPORTDM 1
 
@@ -218,6 +219,8 @@ int _main( int argc, char *argv[] )
 
 	BootStatus(7, s_size, s_cnt);
 	ConfigInit();
+
+	IosIpcInit();
 
 	if (ConfigGetConfig(NIN_CFG_LOG))
 		SDisInit = 1;  // Looks okay after threading fix
@@ -440,6 +443,7 @@ int _main( int argc, char *argv[] )
 		GCAMUpdateRegisters();
 		BTUpdateRegisters();
 		HIDUpdateRegisters(0);
+		IosIpcUpdate();
 		if(DisableSIPatch == 0) SIUpdateRegisters();
 		#endif
 		StreamUpdateRegisters();

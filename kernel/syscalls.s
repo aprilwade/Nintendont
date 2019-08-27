@@ -145,6 +145,36 @@ IOS_Ioctlv:
 	.long 0xe6000450
 	bx lr
 
+	.global IOS_OpenAsync
+	.type   IOS_OpenAsync STT_FUNC
+IOS_OpenAsync:
+	.long 0xe6000470
+	bx lr
+
+	.global IOS_CloseAsync
+	.type   IOS_CloseAsync STT_FUNC
+IOS_CloseAsync:
+	.long 0xe6000490
+	bx lr
+
+	.global IOS_ReadAsync
+	.type   IOS_ReadAsync STT_FUNC
+IOS_ReadAsync:
+	.long 0xe60004A0
+	bx lr
+
+	.global IOS_WriteAsync
+	.type   IOS_WriteAsync STT_FUNC
+IOS_WriteAsync:
+	.long 0xe60004C0
+	bx lr
+
+	.global IOS_SeekAsync
+	.type   IOS_SeekAsync STT_FUNC
+IOS_SeekAsync:
+	.long 0xe60004E0
+	bx lr
+
 	.global IOS_IoctlAsync
 	.type   IOS_IoctlAsync STT_FUNC
 IOS_IoctlAsync:
@@ -234,13 +264,13 @@ syscall_4c:
 syscall_4d:
 	.long 0xe60009b0
 	bx lr
-	
+
 	.global syscall_54
 	.type   syscall_54 STT_FUNC
 syscall_54:
 	.long 0xe6000a90
 	bx lr
-	
+
 	.global VirtualToPhysical
 	.type   VirtualToPhysical STT_FUNC
 VirtualToPhysical:

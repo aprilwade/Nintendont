@@ -2,6 +2,8 @@
 #ifndef __SYSCALLS_H__
 #define __SYSCALLS_H__
 
+#include "ipc.h"
+
 u32 thread_create( u32 (*proc)(void* arg), void* arg, u32* stack, u32 stacksize, u8 priority, bool detach );
 
 #define thread_cancel(a,b) syscall_02(a,b)
@@ -49,15 +51,25 @@ void syscall_1a(int, void *);
 int syscall_1b(const char *device, int queue);
 
 s32 IOS_Open(const char *device, int mode);
+s32 IOS_OpenAsync(const char *device, int mode, int queue, struct ipcmessage *msg);
+
 void IOS_Close(int fd);
+void IOS_CloseAsync(int fd, int queue, struct ipcmessage *msg);
+
 s32 IOS_Read(s32 fd,void *buffer,u32 length);
-s32 IOS_Write( s32 fd, void *buffer, u32 length );
-s32 IOS_Seek( u32 fd, u32 where, u32 whence );
+s32 IOS_ReadAsync(s32 fd,void *buffer,u32 length, int queue, struct ipcmessage *msg);
+
+s32 IOS_Write(s32 fd, void *buffer, u32 length);
+s32 IOS_WriteAsync(s32 fd, void *buffer, u32 length, int queue, struct ipcmessage *msg);
+
+s32 IOS_Seek(u32 fd, u32 where, u32 whence);
+s32 IOS_SeekAsync(u32 fd, u32 where, u32 whence, int queue, struct ipcmessage *msg);
 
 s32 IOS_Ioctl(s32 fd, s32 request, void *buffer_in, s32 length_in, void *buffer_io, s32 length_io);
-s32 IOS_Ioctlv(s32 fd, s32 request, s32 InCount, s32 OutCont, void *vec);
 s32 IOS_IoctlAsync(s32 fd, s32 request, void *buffer_in, s32 length_in, void *buffer_io, s32 length_io, int queue, struct ipcmessage *message);
-s32 IOS_IoctlvAsync(s32 fd, s32 request, s32 InCount, s32 OutCont, void *vec, int id, void *message);
+
+s32 IOS_Ioctlv(s32 fd, s32 request, s32 InCount, s32 OutCont, void *vec);
+s32 IOS_IoctlvAsync(s32 fd, s32 request, s32 InCount, s32 OutCont, void *vec, int id, struct ipcmessage *message);
 
 #define mqueue_ack(a, b) syscall_2a(a, b)
 void syscall_2a(struct ipcmessage *message, int retval);
