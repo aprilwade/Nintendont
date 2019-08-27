@@ -13,6 +13,8 @@
 #include "Config.h"
 #include "ff_utf8.h"
 
+#include "net_dbg.h"
+
 static FIL dbgfile;
 static int file_opened = -1;
 vu32 SDisInit=0;
@@ -303,15 +305,15 @@ int dbgprintf( const char *fmt, ...)
 
 	if ( (*(vu32*)(0xd800070) & 1) == 0)
 		return -1;
-	
-	//char *buffer = (char*)heap_alloc_aligned( 0, 2048, 32 );	
+
+	//char *buffer = (char*)heap_alloc_aligned( 0, 2048, 32 );
 	char buffer[0x100]; //get from stack
 
 	va_start(args, fmt);
 	_vsprintf(buffer, fmt, args);
 	va_end(args);
 
-	u32 read;	
+	u32 read;
 	if( SDisInit )
 	{
 		if(file_opened != FR_OK)	//if log not open yet
@@ -327,14 +329,16 @@ int dbgprintf( const char *fmt, ...)
 				dbgprintf("Version : %d.%d\r\n", NIN_VERSION>>16, NIN_VERSION&0xFFFF );
 			}
 		}
-			
+
 		if (file_opened == FR_OK) {
 			f_lseek(&dbgfile, dbgfile.obj.objsize);
 			f_write(&dbgfile, buffer, strlen(buffer), &read);
 			f_sync(&dbgfile);
 		}
 	}
-
+#ifdef NET_DBG
+	NetDbgSendMsg(buffer, strlen(buffer));
+#endif
 	if( !IsWiiU() ) // usbgecko?
 		svc_write(buffer);
 

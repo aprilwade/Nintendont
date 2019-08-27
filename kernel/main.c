@@ -43,6 +43,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "SDI.h"
 #include "ff_utf8.h"
 
+#include "net_dbg.h"
+
 //#define USE_OSREPORTDM 1
 
 //#undef DEBUG
@@ -79,7 +81,7 @@ int _main( int argc, char *argv[] )
 
 	//Important to do this as early as possible
 	if(read32(0x20109740) == 0xE59F1004)
-		virtentry = 0x20109740; //Address on Wii 
+		virtentry = 0x20109740; //Address on Wii
 	else if(read32(0x2010999C) == 0xE59F1004)
 		virtentry = 0x2010999C; //Address on WiiU
 
@@ -136,6 +138,9 @@ int _main( int argc, char *argv[] )
 		udelay(20);
 		cc_ahbMemFlush(1);
 	}
+#ifdef NET_DBG
+	NetDbgInit();
+#endif
 	//get time from loader
 	InitCurrentTime();
 	//get config from loader
@@ -182,7 +187,7 @@ int _main( int argc, char *argv[] )
 		mdelay(4000);
 		Shutdown();
 	}
-	
+
 	BootStatus(4, 0, 0);
 
 	BootStatus(5, 0, 0);
@@ -343,7 +348,7 @@ int _main( int argc, char *argv[] )
 		if(TimerDiffTicks(InterruptTimer) > 15820) //about 120 times a second
 		{
 			sync_before_read((void*)INT_BASE, 0x80);
-			if((read32(RSW_INT) & 2) || (read32(DI_INT) & 4) || 
+			if((read32(RSW_INT) & 2) || (read32(DI_INT) & 4) ||
 				(read32(SI_INT) & 8) || (read32(EXI_INT) & 0x10))
 				write32(HW_IPC_ARMCTRL, 8); //throw irq
 			InterruptTimer = read32(HW_TIMER);
@@ -560,6 +565,10 @@ int _main( int argc, char *argv[] )
 
 //make sure we set that back to the original
 	write32(HW_PPCSPEED, ori_ppcspeed);
+
+#ifdef NET_DBG
+	NetDbgCleanUp();
+#endif
 
 	if (IsWiiU())
 	{
