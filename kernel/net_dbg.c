@@ -569,7 +569,12 @@ int NetDbgSendMsg(void* msg, int len)
 {
     if(s_so_top_fd != -1 && s_socket != -1) {
         // return SendBroadcast(s_so_top_fd, s_socket, msg, len);
-        return TCPSend(s_so_top_fd, s_socket, msg, len);
+         int i = TCPSend(s_so_top_fd, s_socket, msg, len);
+         if(i < 0) {
+             write32(RESET_STATUS, 0x7DEA);
+             sync_after_write(RESET_STATUS, 0x20);
+         }
+         return i;
     }
     return -1;
 }
