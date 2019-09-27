@@ -232,15 +232,20 @@ void IosIpcUpdate()
             for(i = 0; i < msg_ptr->ioctlv.argc_in + msg_ptr->ioctlv.argc_io; i++) {
                 if(msg_ptr->ioctlv.argv[i].data && msg_ptr->ioctlv.argv[i].len) {
                     sync_before_read(
-                        &msg_ptr->ioctlv.argv[i].data,
+                        msg_ptr->ioctlv.argv[i].data,
                         (msg_ptr->ioctlv.argv[i].len + 31) & ~31u
                     );
                 }
             }
 
             for(i = 0; i < msg_ptr->ioctlv.argc_in + msg_ptr->ioctlv.argc_io; i++) {
-                dbgprintf("IosIpc msgptr->ioctlv.argv[i].data: %p\n", msg_ptr->ioctlv.argv[i].data);
-                dbgprintf("IosIpc msgptr->ioctlv.argv[i].len: %d\n", msg_ptr->ioctlv.argv[i].len);
+                dbgprintf("IosIpc msgptr->ioctlv.argv[%d].data: %p\n", i, msg_ptr->ioctlv.argv[i].data);
+                dbgprintf("IosIpc msgptr->ioctlv.argv[%d].len: %d\n", i, msg_ptr->ioctlv.argv[i].len);
+                int k;
+                for(k = 0; k < msg_ptr->ioctlv.argv[i].len / 4; k++) {
+                    dbgprintf("IosIpc msgptr->ioctlv.argv[%d].data[%d]: %08x\n", i, k, ((int*)msg_ptr->ioctlv.argv[i].data)[k]);
+
+                }
             }
             IOS_IoctlvAsync(
                 fd,
