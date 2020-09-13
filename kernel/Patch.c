@@ -1688,13 +1688,17 @@ void DoPatches( char *Buffer, u32 Length, u32 DiscOffset )
 
 	if(ConfigGetConfig(NIN_CFG_BBA_EMU))
 	{
-		if(TITLE_ID == 0x474D34 || TITLE_ID == 0x474B59 || TITLE_ID == 0x475445)
+		if(TITLE_ID == 0x474D34 || TITLE_ID == 0x474B59 || TITLE_ID == 0x475445
+				// Any game with a region code of R
+				|| (GAME_ID & 255) == 'R')
 			bbaEmuWanted = 1;
 		else if(GAME_ID == 0x4748454A || isPSO)
 			bbaEmuWanted = 2;
 	}
 	else
 		bbaEmuWanted = 0;
+    dbgprintf("NIN_CFG_BBA_EMU = %d\n", ConfigGetConfig(NIN_CFG_BBA_EMU));
+    dbgprintf("bbaEmuWanted = %d\n", bbaEmuWanted);
 
 	if(bbaEmuWanted)
 		PatchCount &= ~FPATCH_OSSleepThread;
@@ -3910,6 +3914,7 @@ void DoPatches( char *Buffer, u32 Length, u32 DiscOffset )
 		write32(SO_HSP_LOC+0x00, (1<<31)|hspAddr);
 		write32(SO_HSP_LOC+0x04, (1<<31)|OSSleepThread);
 		write32(SO_HSP_LOC+0x14, SOStartedOffset);
+		dbgprintf("Patch:SOStartedOffset = %x\r\n", SOStartedOffset);
 		u16 SOShift = 14; //shift 14, 16k
 		SOCurrentTotalFDs = 32;
 		write32(SO_HSP_LOC+0x18, SOShift << 16 | SOCurrentTotalFDs);
