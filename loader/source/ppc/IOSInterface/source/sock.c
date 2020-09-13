@@ -249,6 +249,10 @@ int SOStartup(void)
 	int fd = getFreeFD();
 	do {
 		ret = doCall(nwc_startup, fd, &so_queue[fd]);
+		//NET_DBG compat
+		if(ret==-15) {
+		    break;
+		}
 	} while(ret < 0);
 	freeUpFD(fd);
 	int val = disableIRQs();
